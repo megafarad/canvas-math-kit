@@ -25,8 +25,8 @@ describe('canvasGraphUtils', () => {
         });
 
         it('handles zero and negative grid size gracefully (no snap)', () => {
-            expect(snapToGrid(1.7, 2.3, 0)).toEqual([NaN, NaN]);
-            expect(snapToGrid(1.7, 2.3, -1)).toEqual([-2, -2]);
+            expect(snapToGrid(1.7, 2.3, 0)).toEqual([1.7, 2.3]);
+            expect(snapToGrid(1.7, 2.3, -1)).toEqual([1.7, 2.3]);
         });
     });
 });

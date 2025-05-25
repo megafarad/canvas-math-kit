@@ -97,8 +97,11 @@ export function drawCircle(
 }
 
 export function snapToGrid(x: number, y: number, gridSize: number): [number, number] {
-    return [
-        Math.round(x / gridSize) * gridSize,
-        Math.round(y / gridSize) * gridSize,
-    ];
+    if (gridSize <= 0) return [x, y]; // no snapping
+    const round = (v: number) => {
+        const snapped = Math.round(v / gridSize) * gridSize;
+        return Object.is(snapped, -0) ? 0 : snapped;
+    };
+    return [round(x), round(y)];
 }
+
