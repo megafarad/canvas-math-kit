@@ -38,11 +38,10 @@ interface GraphCanvasProps {
     width: number;
     height: number;
     scale: number;
-    vectors: CanvasVector[];
+    vectors?: CanvasVector[];
     parallelograms?: CanvasParallelogram[];
     snap?: number | ((x: number, y: number) => [number, number]);
     locked?: boolean;
-    isLocked?: (vectors: CanvasVector[]) => boolean;
     onVectorsChange?: (updated: CanvasVector[]) => void;
     customDraw?: (ctx: CanvasRenderingContext2D, origin: Point, scale: number) => void;
 }
@@ -55,14 +54,13 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
                                                      parallelograms,
                                                      snap,
                                                      locked,
-                                                     isLocked,
                                                      onVectorsChange,
                                                      customDraw
                                                  }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const origin: Point = { x: width / 2, y: height / 2 };
     const [dragIndex, setDragIndex] = useState<number | null>(null);
-    const shouldLock = locked ?? isLocked?.(vectors) ?? false;
+    const shouldLock = locked ?? false;
 
     // Draw vectors on canvas
     useEffect(() => {
@@ -73,7 +71,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         drawGrid(ctx, width, height, scale);
         drawAxes(ctx, width, height, origin);
 
-        vectors.forEach((vec) => {
+        vectors?.forEach((vec) => {
             const from = toCanvas(0, 0, origin, scale);
             const to = toCanvas(vec.x, vec.y, origin, scale);
             const color = vec.color || 'blue';
@@ -118,8 +116,10 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         const mx = e.clientX - rect.left;
         const my = e.clientY - rect.top;
 
-        for (let i = 0; i < vectors.length; i++) {
-            const vec = vectors[i];
+        const iterableVectors = vectors ?? [];
+
+        for (let i = 0; i < iterableVectors.length; i++) {
+            const vec = iterableVectors[i];
             if (shouldLock || !vec.draggable) continue;
             const head = toCanvas(vec.x, vec.y, origin, scale);
             const dist = Math.hypot(mx - head.x, my - head.y);
@@ -146,9 +146,9 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             [vx, vy] = snap(vx, vy);
         }
 
-        const updated = vectors.map((vec, i) =>
+        const updated = vectors?.map((vec, i) =>
             i === dragIndex ? { ...vec, x: vx, y: vy } : vec
-        );
+        ) ?? [];
         onVectorsChange?.(updated);
     };
 
