@@ -40,7 +40,7 @@ export function drawAxes(ctx: CanvasRenderingContext2D, width: number, height: n
     ctx.stroke();
 }
 
-export function drawVector(
+export function drawLine(
     ctx: CanvasRenderingContext2D,
     from: Point,
     to: Point,

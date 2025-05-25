@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
     drawGrid,
     drawAxes,
-    drawVector,
+    drawLine,
     drawArrowhead,
     drawCircle,
     toCanvas,
@@ -28,6 +28,7 @@ interface GraphCanvasProps {
     vectors: CanvasVector[];
     snap?: number | ((x: number, y: number) => [number, number]);
     onVectorsChange?: (updated: CanvasVector[]) => void;
+    customDraw?: (ctx: CanvasRenderingContext2D, origin: Point, scale: number) => void;
 }
 
 const GraphCanvas: React.FC<GraphCanvasProps> = ({
@@ -37,6 +38,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
                                                      vectors,
                                                      snap,
                                                      onVectorsChange,
+                                                     customDraw
                                                  }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const origin: Point = { x: width / 2, y: height / 2 };
@@ -58,7 +60,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             const style = vec.headStyle ?? 'arrow';
 
             // Always draw the line
-            drawVector(ctx, from, to, color);
+            drawLine(ctx, from, to, color);
 
             // Optional head decorations
             if (style === 'arrow' || style === 'both') {
@@ -69,6 +71,14 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
                 drawCircle(ctx, to, 4, color);
             }
         });
+
+        if (customDraw) {
+            try {
+                customDraw(ctx, origin, scale);
+            } catch (e) {
+                console.error('customDraw threw error: ', e);
+            }
+        }
 
     }, [vectors, width, height, scale]);
 
