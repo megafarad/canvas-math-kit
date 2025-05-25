@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {GraphCanvas} from "../src";
-import {CanvasVector} from "../src/GraphCanvas";
+import {CanvasVector} from "../src";
+import {CanvasParallelogram} from "../src/GraphCanvas";
 
 const App = () => {
     const [vectors, setVectors] = useState<CanvasVector[]>([
@@ -11,6 +12,19 @@ const App = () => {
         ]
     );
 
+    const parallelograms: CanvasParallelogram[] = [
+        {
+            vectorA: {
+                x: 1,
+                y: 0
+            },
+            vectorB: {
+                x: 0,
+                y: 1
+            }
+        }
+    ]
+
     return (
         <div style={{ padding: 20 }}>
             <h1>Canvas Math Kit Demo</h1>
@@ -19,6 +33,7 @@ const App = () => {
                 height={400}
                 scale={40}
                 vectors={vectors}
+                parallelograms={parallelograms}
                 snap={.5}
                 onVectorsChange={setVectors}
             />
