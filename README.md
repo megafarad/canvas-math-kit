@@ -15,56 +15,85 @@ Perfect for:
 npm install @sirhc77/canvas-math-kit
 ````
 
----
-
-## 🚀 Usage
+### 📦 Import
 
 ```tsx
-import { GraphCanvas, CanvasVector } from '@sirhc77/canvas-math-kit';
-
-const [vectors, setVectors] = useState<CanvasVector[]>([
-  { x: 1, y: 1, color: 'red', draggable: true, headStyle: 'circle' },
-  { x: -0.5, y: 1.5, color: 'blue', headStyle: 'arrow' }
-]);
-
-<GraphCanvas
-  width={400}
-  height={400}
-  scale={40}
-  vectors={vectors}
-  onVectorsChange={setVectors}
-  snap={1} // optional: snap to grid
-/>
+import { GraphCanvas, type CanvasVector, type CanvasParallelogram } from '@sirhc77/canvas-math-kit';
 ```
 
 ---
 
-## 🎛️ Props
+### 🎛️ `<GraphCanvas />` Props
 
-### `<GraphCanvas />`
-
-| Prop              | Type                                           | Description                     |
-| ----------------- | ---------------------------------------------- | ------------------------------- |
-| `width`           | `number`                                       | Width of the canvas (pixels)    |
-| `height`          | `number`                                       | Height of the canvas (pixels)   |
-| `scale`           | `number`                                       | Canvas units per grid square    |
-| `vectors`         | `CanvasVector[]`                               | Array of vectors to render      |
-| `onVectorsChange` | `(updated: CanvasVector[]) => void`            | Called when a vector is dragged |
-| `snap`            | `number` or `(x: number, y: number) => [x, y]` | Optional snapping               |
+| Prop              | Type                                                                  | Description                                                         |
+| ----------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `width`           | `number`                                                              | Width of the canvas in pixels                                       |
+| `height`          | `number`                                                              | Height of the canvas in pixels                                      |
+| `scale`           | `number`                                                              | Pixels per unit                                                     |
+| `vectors`         | `CanvasVector[]` *(optional)*                                         | Vectors to render and optionally drag                               |
+| `onVectorsChange` | `(updated: CanvasVector[]) => void` *(optional)*                      | Callback fired when a draggable vector is moved                     |
+| `snap`            | `number` \| `(x: number, y: number) => [number, number]` *(optional)* | Enables snapping to a grid or custom logic                          |
+| `locked`          | `boolean` *(optional)*                                                | If `true`, disables all dragging                                    |
+| `parallelograms`  | `CanvasParallelogram[]` *(optional)*                                  | Areas formed by two vectors, filled and outlined                    |
+| `customDraw`      | `(ctx, origin, scale) => void` *(optional)*                           | Custom canvas drawing logic (runs after vectors and parallelograms) |
 
 ---
 
-## 🧩 `CanvasVector`
+### 🧩 `CanvasVector` Type
 
 ```ts
+type VectorHeadStyle = 'arrow' | 'circle' | 'both' | 'none';
+
 interface CanvasVector {
   x: number;
   y: number;
-  color?: string;              // Defaults to 'blue'
-  draggable?: boolean;         // Defaults to false
-  headStyle?: 'arrow' | 'circle' | 'both' | 'none'; // Defaults to 'arrow'
-  label?: string;              // (planned feature)
+  color?: string;              // Default: 'blue'
+  draggable?: boolean;         // Default: false
+  headStyle?: VectorHeadStyle; // Default: 'arrow'
+  label?: string;              // (Reserved for future)
 }
+```
+
+---
+
+### 🔷 `CanvasParallelogram` Type
+
+```ts
+interface CanvasParallelogram {
+  vectorA: { x: number; y: number };
+  vectorB: { x: number; y: number };
+  fillColor?: string;   // Default: translucent blue
+  strokeColor?: string; // Default: darker blue
+}
+```
+
+---
+
+### 🧪 Example Usage
+
+```tsx
+<GraphCanvas
+  width={400}
+  height={400}
+  scale={40}
+  vectors={[
+    { x: 2, y: 1, color: 'red', draggable: true, headStyle: 'both' },
+    { x: -1, y: 2, color: 'green', headStyle: 'circle' }
+  ]}
+  parallelograms={[
+    {
+      vectorA: { x: 2, y: 1 },
+      vectorB: { x: -1, y: 2 },
+      fillColor: 'rgba(255, 0, 0, 0.1)',
+      strokeColor: 'rgba(255, 0, 0, 0.4)'
+    }
+  ]}
+  snap={1}
+  customDraw={(ctx, origin, scale) => {
+    const p = (x: number, y: number) => toCanvas(x, y, origin, scale);
+    drawLine(ctx, p(-3, 0), p(3, 0), 'black', 1, true);
+  }}
+/>
 ```
 
 ---
