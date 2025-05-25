@@ -1,14 +1,13 @@
 {
   "name": "@sirhc77/canvas-math-kit",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "vitest"
   },
-  "keywords": [],
   "author": "Chris Carrington <chris@megafarad.com> (https://megafarad.com)",
   "license": "MIT",
   "description": "A lightweight, interactive canvas-based vector visualizer for math, linear algebra, and ML education. Built with React + TypeScript.",
@@ -22,5 +21,17 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vitest": "^3.1.4"
-  }
+  },
+  "keywords": [
+    "canvas",
+    "math",
+    "linear-algebra",
+    "react",
+    "vector",
+    "graph",
+    "visualization",
+    "educational",
+    "geometry",
+    "interactive"
+  ]
 }
