@@ -12,7 +12,7 @@ Perfect for:
 ## 📦 Installation
 
 ```bash
-npm install canvas-math-kit
+npm install @sirhc77/canvas-math-kit
 ````
 
 ---
@@ -20,7 +20,7 @@ npm install canvas-math-kit
 ## 🚀 Usage
 
 ```tsx
-import { GraphCanvas, CanvasVector } from 'canvas-math-kit';
+import { GraphCanvas, CanvasVector } from '@sirhc77/canvas-math-kit';
 
 const [vectors, setVectors] = useState<CanvasVector[]>([
   { x: 1, y: 1, color: 'red', draggable: true, headStyle: 'circle' },
