@@ -1,12 +1,7 @@
 {
   "name": "@sirhc77/canvas-math-kit",
   "private": false,
-  "version": "1.0.2",
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
+  "version": "1.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
