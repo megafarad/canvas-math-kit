@@ -45,13 +45,24 @@ export function drawLine(
     from: Point,
     to: Point,
     color: string,
-    width: number = 2
+    width: number = 2,
+    dashed: boolean = false,
+    dashPatternOverride?: number[]
 ) {
     ctx.beginPath();
     ctx.moveTo(from.x, from.y);
     ctx.lineTo(to.x, to.y);
     ctx.strokeStyle = color;
     ctx.lineWidth = width;
+
+    if (dashPatternOverride) {
+        ctx.setLineDash(dashPatternOverride);
+    } else if (dashed) {
+        ctx.setLineDash([5, 5]);
+    } else {
+        ctx.setLineDash([]);
+    }
+
     ctx.stroke();
 }
 
