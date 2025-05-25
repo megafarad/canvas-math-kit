@@ -5,6 +5,7 @@ import {
     drawLine,
     drawArrowhead,
     drawCircle,
+    drawParallelogram,
     toCanvas,
     Point,
     snapToGrid
@@ -21,11 +22,24 @@ export interface CanvasVector {
     label?: string;
 }
 
+export interface ParallelogramVector {
+    x: number;
+    y: number;
+}
+
+export interface CanvasParallelogram {
+    vectorA: ParallelogramVector;
+    vectorB: ParallelogramVector;
+    fillColor?: string;
+    strokeColor?: string;
+}
+
 interface GraphCanvasProps {
     width: number;
     height: number;
     scale: number;
     vectors: CanvasVector[];
+    parallelograms?: CanvasParallelogram[];
     snap?: number | ((x: number, y: number) => [number, number]);
     locked?: boolean;
     isLocked?: (vectors: CanvasVector[]) => boolean;
@@ -38,6 +52,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
                                                      height,
                                                      scale,
                                                      vectors,
+                                                     parallelograms,
                                                      snap,
                                                      locked,
                                                      isLocked,
@@ -77,6 +92,16 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             }
         });
 
+        const fromPVec = (v: ParallelogramVector) => toCanvas(v.x, v.y, origin, scale);
+
+        parallelograms?.forEach(p => {
+            const p0 = toCanvas(0, 0, origin, scale);
+            const p1 = fromPVec(p.vectorA);
+            const p3 = fromPVec(p.vectorB);
+            const p2 = { x: p1.x + (p3.x - p0.x), y: p1.y + (p3.y - p0.y) };
+            drawParallelogram(ctx, p0, p1, p2, p3, p.fillColor, p.strokeColor);
+        });
+
         if (customDraw) {
             try {
                 customDraw(ctx, origin, scale);
@@ -85,7 +110,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             }
         }
 
-    }, [vectors, width, height, scale]);
+    }, [vectors, width, height, scale, parallelograms, customDraw]);
 
     // Handle dragging
     const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -141,6 +166,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            style={{cursor: dragIndex !== null ? 'grabbing' : 'default'}}
         />
     );
 };

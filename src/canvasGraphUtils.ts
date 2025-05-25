@@ -116,3 +116,37 @@ export function snapToGrid(x: number, y: number, gridSize: number): [number, num
     return [round(x), round(y)];
 }
 
+export function drawPolygon(
+    ctx: CanvasRenderingContext2D,
+    points: Point[],
+    fillColor: string = 'rgba(0, 0, 255, 0.1)',
+    strokeColor: string = 'rgba(0, 0, 255, 0.4)'
+) {
+    if (points.length < 3) return;
+
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.closePath();
+
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
+    ctx.fill();
+    ctx.stroke();
+}
+
+export function drawParallelogram(
+    ctx: CanvasRenderingContext2D,
+    p0: Point,
+    p1: Point,
+    p2: Point,
+    p3: Point,
+    fillColor?: string,
+    strokeColor?: string
+) {
+    drawPolygon(ctx, [p0, p1, p2, p3], fillColor, strokeColor);
+}
+
+
