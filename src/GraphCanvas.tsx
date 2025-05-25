@@ -27,6 +27,8 @@ interface GraphCanvasProps {
     scale: number;
     vectors: CanvasVector[];
     snap?: number | ((x: number, y: number) => [number, number]);
+    locked?: boolean;
+    isLocked?: (vectors: CanvasVector[]) => boolean;
     onVectorsChange?: (updated: CanvasVector[]) => void;
     customDraw?: (ctx: CanvasRenderingContext2D, origin: Point, scale: number) => void;
 }
@@ -37,12 +39,15 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
                                                      scale,
                                                      vectors,
                                                      snap,
+                                                     locked,
+                                                     isLocked,
                                                      onVectorsChange,
                                                      customDraw
                                                  }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const origin: Point = { x: width / 2, y: height / 2 };
     const [dragIndex, setDragIndex] = useState<number | null>(null);
+    const shouldLock = locked ?? isLocked?.(vectors) ?? false;
 
     // Draw vectors on canvas
     useEffect(() => {
@@ -90,7 +95,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
         for (let i = 0; i < vectors.length; i++) {
             const vec = vectors[i];
-            if (!vec.draggable) continue;
+            if (shouldLock || !vec.draggable) continue;
             const head = toCanvas(vec.x, vec.y, origin, scale);
             const dist = Math.hypot(mx - head.x, my - head.y);
             if (dist < 10) {
