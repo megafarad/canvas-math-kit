@@ -35,6 +35,8 @@ export interface CanvasParallelogram {
 }
 
 interface GraphCanvasProps {
+    width: number;
+    height: number;
     scale: number;
     vectors?: CanvasVector[];
     parallelograms?: CanvasParallelogram[];
@@ -45,6 +47,8 @@ interface GraphCanvasProps {
 }
 
 const GraphCanvas: React.FC<GraphCanvasProps> = ({
+                                                     width,
+                                                     height,
                                                      scale,
                                                      vectors,
                                                      parallelograms,
@@ -59,8 +63,6 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
-    const dpr = window.devicePixelRatio || 1;// user-friendly
-    const scaleDevice = scale * dpr; // actual pixels per unit
 
     useEffect(() => {
         const resize = () => {
@@ -94,12 +96,12 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         const origin: Point = { x: logicalWidth / 2, y: logicalHeight / 2 };
 
         ctx.clearRect(0, 0, logicalWidth, logicalHeight);
-        drawGrid(ctx, logicalWidth, logicalHeight, scaleDevice);
+        drawGrid(ctx, logicalWidth, logicalHeight, scale);
         drawAxes(ctx, logicalWidth, logicalHeight, origin);
 
         vectors?.forEach((vec) => {
-            const from = toCanvas(0, 0, origin, scaleDevice);
-            const to = toCanvas(vec.x, vec.y, origin, scaleDevice);
+            const from = toCanvas(0, 0, origin, scale);
+            const to = toCanvas(vec.x, vec.y, origin, scale);
             const color = vec.color || 'blue';
             const style = vec.headStyle ?? 'arrow';
 
@@ -111,17 +113,17 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         parallelograms?.forEach(p => {
             const vA = p.vectorA;
             const vB = p.vectorB;
-            const p0 = toCanvas(0, 0, origin, scaleDevice);
-            const p1 = toCanvas(vA.x, vA.y, origin, scaleDevice);
-            const p2 = toCanvas(vA.x + vB.x, vA.y + vB.y, origin, scaleDevice);
-            const p3 = toCanvas(vB.x, vB.y, origin, scaleDevice);
+            const p0 = toCanvas(0, 0, origin, scale);
+            const p1 = toCanvas(vA.x, vA.y, origin, scale);
+            const p2 = toCanvas(vA.x + vB.x, vA.y + vB.y, origin, scale);
+            const p3 = toCanvas(vB.x, vB.y, origin, scale);
 
             drawParallelogram(ctx, p0, p1, p2, p3, p.fillColor, p.strokeColor);
         });
 
         if (customDraw) {
             try {
-                customDraw(ctx, origin, scaleDevice);
+                customDraw(ctx, origin, scale);
             } catch (e) {
                 console.error('customDraw threw error: ', e);
             }
@@ -131,7 +133,7 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
     usePointerDrag(canvasRef, vectors ?? [], onVectorsChange ?? (() => {}), {
         origin: { x: canvasSize.width / 2, y: canvasSize.height / 2 },
-        scale: scaleDevice,
+        scale: scale,
         snap,
         isLocked: shouldLock,
         onDragStart: () => setDragging(true),
@@ -140,6 +142,8 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
     return (
         <canvas
+            width={width}
+            height={height}
             ref={canvasRef}
             className="border"
             style={{

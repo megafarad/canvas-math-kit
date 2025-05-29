@@ -26,7 +26,9 @@ const App = () => {
             <h1>Canvas Math Kit Demo</h1>
             <div style={{ width: '100%', height: '80vh' }}>
                 <GraphCanvas
-                    scale={20}
+                    width={400}
+                    height={400}
+                    scale={40}
                     vectors={vectors}
                     parallelograms={parallelograms}
                     snap={0.5}
