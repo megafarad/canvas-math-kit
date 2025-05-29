@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { GraphCanvas } from "../src";
 import { CanvasVector } from "../src";
 import { CanvasParallelogram } from "../src/components/GraphCanvas";
+import './index.css';
 
 const App = () => {
     const [vectors, setVectors] = useState<CanvasVector[]>([
