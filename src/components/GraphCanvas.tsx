@@ -66,15 +66,20 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
     useEffect(() => {
         const resize = () => {
-            const rect = canvasRef.current?.getBoundingClientRect();
-            if (rect) {
-                setCanvasSize({ width: rect.width, height: rect.height });
+            const screenWidth = window.innerWidth;
+            if (screenWidth < 600) {
+                // Mobile-ish: use full width, cap height to maintain square
+                const size = Math.min(screenWidth - 20, 300); // give some margin
+                setCanvasSize({ width: size, height: size });
+            } else {
+                setCanvasSize({ width: width, height: height });
             }
         };
         resize();
         window.addEventListener('resize', resize);
         return () => window.removeEventListener('resize', resize);
     }, []);
+
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -85,15 +90,18 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         const logicalWidth = rect.width;
         const logicalHeight = rect.height;
 
-        canvas.width = logicalWidth * dpr;
-        canvas.height = logicalHeight * dpr;
+        canvas.width = canvasSize.width * dpr;
+        canvas.height = canvasSize.height * dpr;
 
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
         ctx.scale(dpr, dpr); // this affects only the rendering, not the logical units
 
-        const origin: Point = { x: logicalWidth / 2, y: logicalHeight / 2 };
+        const origin: Point = {
+            x: canvasSize.width / 2,
+            y: canvasSize.height / 2,
+        };
 
         ctx.clearRect(0, 0, logicalWidth, logicalHeight);
         drawGrid(ctx, logicalWidth, logicalHeight, scale);
@@ -142,17 +150,16 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
     return (
         <canvas
-            width={width}
-            height={height}
             ref={canvasRef}
             className="border"
             style={{
-                width: '100%',
-                height: '100%',
+                width: canvasSize.width + 'px',
+                height: canvasSize.height + 'px',
                 touchAction: 'none',
                 cursor: dragging ? 'grabbing' : 'grab',
             }}
         />
+
     );
 };
 
