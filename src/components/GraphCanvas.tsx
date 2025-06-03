@@ -19,7 +19,7 @@ export interface CanvasVector {
     color?: string;
     draggable?: boolean;
     headStyle?: VectorHeadStyle;
-    label?: string;
+    label?: string | ((x: number, y: number) => string);
 }
 
 export interface ParallelogramVector {
@@ -121,10 +121,11 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             if (style === 'arrow' || style === 'both') drawArrowhead(ctx, from, to, color);
             if (style === 'circle' || style === 'both') drawCircle(ctx, to, 4, color); // 4 is already in logical units
             if (vec.label) {
+                const label = typeof vec.label === 'string' ? vec.label : vec.label(vec.x, vec.y);
                 ctx.save();
                 ctx.font = '12px sans-serif';
                 ctx.fillStyle = color;
-                ctx.fillText(vec.label, to.x + 5, to.y - 5);
+                ctx.fillText(label, to.x + 5, to.y - 5);
                 ctx.restore();
             }
         });
