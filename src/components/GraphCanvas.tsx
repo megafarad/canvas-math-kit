@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { usePointerDrag } from "../hooks/usePointerDrag";
+import {DragTarget, usePointerDrag} from "../hooks/usePointerDrag";
 import {
     drawGrid,
     drawAxes,
@@ -43,6 +43,8 @@ interface GraphCanvasProps {
     snap?: number | ((x: number, y: number) => [number, number]);
     locked?: boolean;
     onVectorsChange?: (updated: CanvasVector[]) => void;
+    customDragTargets?: DragTarget[];
+    onCustomDragTargetsChange?: (updated: DragTarget[]) => void;
     customDraw?: (ctx: CanvasRenderingContext2D, origin: Point, scale: number) => void;
 }
 
@@ -55,6 +57,8 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
                                                      snap,
                                                      locked,
                                                      onVectorsChange,
+                                                     customDragTargets,
+                                                     onCustomDragTargetsChange,
                                                      customDraw
                                                  }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -146,6 +150,15 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
         isLocked: shouldLock,
         onDragStart: () => setDragging(true),
         onDragEnd: () => setDragging(false),
+    });
+
+    usePointerDrag(canvasRef, customDragTargets ?? [], onCustomDragTargetsChange ?? (() => {}), {
+        origin: { x: canvasSize.width / 2, y: canvasSize.height / 2 },
+        scale: scale,
+        snap,
+        isLocked: shouldLock,
+        onDragStart: () => setDragging(true),
+        onDragEnd: () => setDragging(false)
     });
 
     return (

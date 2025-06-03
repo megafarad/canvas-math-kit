@@ -129,3 +129,19 @@ export function drawParallelogram(
 
     ctx.restore();
 }
+
+export function writeLabel(ctx: CanvasRenderingContext2D, text: string, x: number, y: number,
+                           font: string = '16px Arial', color: string = '#333',
+                           textAlign: CanvasTextAlign = 'left',
+                           textBaseline: CanvasTextBaseline = 'middle') {
+
+    if (ctx) {
+        ctx.save();
+        ctx.font = font;
+        ctx.fillStyle = color;
+        ctx.textAlign = textAlign;
+        ctx.textBaseline = textBaseline;
+        ctx.fillText(text, x, y);
+        ctx.restore();
+    }
+}
