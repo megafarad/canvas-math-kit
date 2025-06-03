@@ -120,6 +120,13 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             drawLine(ctx, from, to, color);
             if (style === 'arrow' || style === 'both') drawArrowhead(ctx, from, to, color);
             if (style === 'circle' || style === 'both') drawCircle(ctx, to, 4, color); // 4 is already in logical units
+            if (vec.label) {
+                ctx.save();
+                ctx.font = '12px sans-serif';
+                ctx.fillStyle = color;
+                ctx.fillText(vec.label, to.x + 5, to.y - 5);
+                ctx.restore();
+            }
         });
 
         parallelograms?.forEach(p => {

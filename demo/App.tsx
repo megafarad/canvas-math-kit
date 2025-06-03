@@ -12,8 +12,8 @@ const height = 400;
 const scale = 30;
 
 const initialVectors: CanvasVector[] = [
-    { x: 1, y: 1, color: 'red', draggable: true, headStyle: 'circle' },
-    { x: 2, y: 0.5, color: 'blue', headStyle: 'arrow' },
+    { x: 1, y: 1, color: 'red', draggable: true, headStyle: 'circle', label: 'v₁' },
+    { x: 2, y: 0.5, color: 'blue', headStyle: 'arrow', label: 'v₂' },
     { x: -1, y: 1, color: 'green', headStyle: 'both', draggable: true },
     { x: -0.5, y: -0.5, headStyle: 'none' }
 ]
