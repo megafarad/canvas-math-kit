@@ -36,7 +36,7 @@ import { GraphCanvas, type CanvasVector, type CanvasParallelogram } from '@sirhc
 | `locked`                    | `boolean` *(optional)*                                                | If `true`, disables all dragging                                    |
 | `parallelograms`            | `CanvasParallelogram[]` *(optional)*                                  | Areas formed by two vectors, filled and outlined                    |
 | `customDragTargets`         | `DragTarget[]` *(optional)*                                           | Items other than vectors that are draggable                         |
-| `onCustomDragTargetsChange` | `(updated: DragTarget[]) => void` *(optional)*                        | Callback fired when a custonm drag target is moved                  |
+| `onCustomDragTargetsChange` | `(updated: DragTarget[]) => void` *(optional)*                        | Callback fired when a custom drag target is moved                   |
 | `customDraw`                | `(ctx, origin, scale) => void` *(optional)*                           | Custom canvas drawing logic (runs after vectors and parallelograms) |
 
 ---
