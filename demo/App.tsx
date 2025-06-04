@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {drawArrowhead, drawCircle, drawLine, GraphCanvas, Point, toCanvas, writeLabel} from "../src";
 import { CanvasVector } from "../src";
-import { CanvasParallelogram } from "../src/components/GraphCanvas";
+import { CanvasParallelogram } from "../src";
 import './index.css';
-import {DragTarget} from "../src/hooks/usePointerDrag";
+import {DragTarget} from "../src";
 
 const initialPoints: DragTarget = { x: 2, y: 2, draggable: true };
 
@@ -20,7 +20,7 @@ const initialVectors: CanvasVector[] = [
 
 const App = () => {
     const [vectors, setVectors] = useState<CanvasVector[]>(initialVectors);
-    const [points, setpoints] = useState<DragTarget>(initialPoints);
+    const [points, setPoints] = useState<DragTarget>(initialPoints);
 
     const gradients: DragTarget = {
             x: 2 * points.x,
@@ -41,14 +41,14 @@ const App = () => {
 
     const handleReset = () => {
         setVectors(initialVectors);
-        setpoints(initialPoints);
+        setPoints(initialPoints);
     }
 
     const customDraw = (ctx: CanvasRenderingContext2D, origin: Point, scale: number) => {
         const pointCanvas = toCanvas(points.x, points.y, origin, scale);
         const gradientEnd = toCanvas(points.x + gradients.x * 0.2, points.y + gradients.y * 0.2, origin, scale);
 
-        drawLine(ctx, pointCanvas, gradientEnd, 'red');
+        drawLine(ctx, pointCanvas, gradientEnd, 'red', 2);
         drawCircle(ctx, pointCanvas, 4, 'red');
         drawArrowhead(ctx, pointCanvas, gradientEnd, 'red');
         writeLabel(ctx, `Point: (${points.x}, ${points.y})`, 10, 20, '12px Arial');
@@ -86,7 +86,7 @@ const App = () => {
                             snap={0.5}
                             customDraw={customDraw}
                             customDragTargets={[points]}
-                            onCustomDragTargetsChange={(dragTargets) => setpoints(dragTargets[0])}
+                            onCustomDragTargetsChange={(dragTargets) => setPoints(dragTargets[0])}
                             onVectorsChange={setVectors}
                         />
                     </div>
@@ -95,7 +95,7 @@ const App = () => {
                             onClick={handleReset}
                             className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
                         >
-                            Reset Vectors
+                            Reset Items
                         </button>
                     </div>
                 </div>

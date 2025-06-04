@@ -153,22 +153,26 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
     }, [vectors, scale, parallelograms, customDraw, canvasSize]);
 
-    usePointerDrag(canvasRef, vectors ?? [], onVectorsChange ?? (() => {}), {
+    const vectorItems = vectors ?? [];
+    const customDragTargetItems = customDragTargets ?? [];
+
+    const allDragTargets = [...vectorItems.map((v, i) => ({ ...v, type: 'vector' as const, index: i })),
+        ...customDragTargetItems.map((v, i) => ({ ...v, type: 'dragTarget' as const, index: i }))];
+
+    const onAllDragTargetsChange = (updatedItems: typeof allDragTargets) => {
+        const vectorItems = updatedItems.filter(i => i.type === 'vector') as CanvasVector[];
+        const customDragTargetItems = updatedItems.filter(i => i.type === 'dragTarget') as DragTarget[];
+        onVectorsChange?.(vectorItems);
+        onCustomDragTargetsChange?.(customDragTargetItems);
+    }
+
+    usePointerDrag(canvasRef, allDragTargets, onAllDragTargetsChange, {
         origin: { x: canvasSize.width / 2, y: canvasSize.height / 2 },
         scale: scale,
         snap,
         isLocked: shouldLock,
         onDragStart: () => setDragging(true),
         onDragEnd: () => setDragging(false),
-    });
-
-    usePointerDrag(canvasRef, customDragTargets ?? [], onCustomDragTargetsChange ?? (() => {}), {
-        origin: { x: canvasSize.width / 2, y: canvasSize.height / 2 },
-        scale: scale,
-        snap,
-        isLocked: shouldLock,
-        onDragStart: () => setDragging(true),
-        onDragEnd: () => setDragging(false)
     });
 
     return (

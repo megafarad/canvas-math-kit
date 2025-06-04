@@ -25,17 +25,19 @@ import { GraphCanvas, type CanvasVector, type CanvasParallelogram } from '@sirhc
 
 ### 🎛️ `<GraphCanvas />` Props
 
-| Prop              | Type                                                                  | Description                                                         |
-| ----------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `width`           | `number`                                                              | Width of the canvas in pixels                                       |
-| `height`          | `number`                                                              | Height of the canvas in pixels                                      |
-| `scale`           | `number`                                                              | Pixels per unit                                                     |
-| `vectors`         | `CanvasVector[]` *(optional)*                                         | Vectors to render and optionally drag                               |
-| `onVectorsChange` | `(updated: CanvasVector[]) => void` *(optional)*                      | Callback fired when a draggable vector is moved                     |
-| `snap`            | `number` \| `(x: number, y: number) => [number, number]` *(optional)* | Enables snapping to a grid or custom logic                          |
-| `locked`          | `boolean` *(optional)*                                                | If `true`, disables all dragging                                    |
-| `parallelograms`  | `CanvasParallelogram[]` *(optional)*                                  | Areas formed by two vectors, filled and outlined                    |
-| `customDraw`      | `(ctx, origin, scale) => void` *(optional)*                           | Custom canvas drawing logic (runs after vectors and parallelograms) |
+| Prop                        | Type                                                                  | Description                                                         |
+|-----------------------------|-----------------------------------------------------------------------|---------------------------------------------------------------------|
+| `width`                     | `number`                                                              | Width of the canvas in pixels                                       |
+| `height`                    | `number`                                                              | Height of the canvas in pixels                                      |
+| `scale`                     | `number`                                                              | Pixels per unit                                                     |
+| `vectors`                   | `CanvasVector[]` *(optional)*                                         | Vectors to render and optionally drag                               |
+| `onVectorsChange`           | `(updated: CanvasVector[]) => void` *(optional)*                      | Callback fired when a draggable vector is moved                     |
+| `snap`                      | `number` \| `(x: number, y: number) => [number, number]` *(optional)* | Enables snapping to a grid or custom logic                          |
+| `locked`                    | `boolean` *(optional)*                                                | If `true`, disables all dragging                                    |
+| `parallelograms`            | `CanvasParallelogram[]` *(optional)*                                  | Areas formed by two vectors, filled and outlined                    |
+| `customDragTargets`         | `DragTarget[]` *(optional)*                                           | Items other than vectors that are draggable                         |
+| `onCustomDragTargetsChange` | `(updated: DragTarget[]) => void` *(optional)*                        | Callback fired when a custonm drag target is moved                  |
+| `customDraw`                | `(ctx, origin, scale) => void` *(optional)*                           | Custom canvas drawing logic (runs after vectors and parallelograms) |
 
 ---
 
@@ -50,7 +52,8 @@ interface CanvasVector {
   color?: string;              // Default: 'blue'
   draggable?: boolean;         // Default: false
   headStyle?: VectorHeadStyle; // Default: 'arrow'
-  label?: string;              // (Reserved for future)
+  label?: string;
+  width?: number;
 }
 ```
 
@@ -117,7 +120,7 @@ Or check the [live demo](#) (coming soon).
 * [x] Draggable vectors
 * [x] Snapping support
 * [x] Per-vector styling
-* [ ] Labels
+* [x] Labels
 * [ ] Hover highlights
 * [ ] Animation support
 * [ ] Export to PNG

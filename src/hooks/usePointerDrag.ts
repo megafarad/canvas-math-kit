@@ -32,6 +32,11 @@ export function usePointerDrag<T extends DragTarget>(
     }: PointerDragOptions
 ): void {
     const dragIndexRef = useRef<number | null>(null);
+    const itemsRef = useRef(items);
+
+    useEffect(() => {
+        itemsRef.current = items;
+    }, [items]);
 
     function getCanvasCoords(e: PointerEvent): { x: number; y: number } {
         const rect = canvasRef.current!.getBoundingClientRect();
@@ -78,7 +83,7 @@ export function usePointerDrag<T extends DragTarget>(
             if (dragIndexRef.current === null) return;
             const coords = getCanvasCoords(e);
             const [x, y] = applySnap(coords.x, coords.y);
-            const updated = items.map((item, i) =>
+            const updated = itemsRef.current.map((item, i) =>
                 i === dragIndexRef.current ? { ...item, x, y } : item
             );
             onChange(updated);
