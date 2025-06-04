@@ -20,6 +20,7 @@ export interface CanvasVector {
     draggable?: boolean;
     headStyle?: VectorHeadStyle;
     label?: string | ((x: number, y: number) => string);
+    width?: number;
 }
 
 export interface ParallelogramVector {
@@ -116,8 +117,9 @@ const GraphCanvas: React.FC<GraphCanvasProps> = ({
             const to = toCanvas(vec.x, vec.y, origin, scale);
             const color = vec.color || 'blue';
             const style = vec.headStyle ?? 'arrow';
+            const lineWidth = vec.width ?? 2;
 
-            drawLine(ctx, from, to, color);
+            drawLine(ctx, from, to, color, lineWidth);
             if (style === 'arrow' || style === 'both') drawArrowhead(ctx, from, to, color);
             if (style === 'circle' || style === 'both') drawCircle(ctx, to, 4, color); // 4 is already in logical units
             if (vec.label) {

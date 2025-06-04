@@ -62,10 +62,10 @@ export function drawAxes(ctx: CanvasRenderingContext2D, width: number, height: n
     ctx.restore();
 }
 
-export function drawLine(ctx: CanvasRenderingContext2D, from: Point, to: Point, color: string) {
+export function drawLine(ctx: CanvasRenderingContext2D, from: Point, to: Point, color: string, lineWidth: number) {
     ctx.save();
     ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = lineWidth;
     ctx.beginPath();
     ctx.moveTo(from.x, from.y);
     ctx.lineTo(to.x, to.y);
