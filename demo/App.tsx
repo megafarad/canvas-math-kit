@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {drawArrowhead, drawCircle, drawLine, GraphCanvas, Point, toCanvas, writeLabel} from "../src";
 import { CanvasVector } from "../src";
 import { CanvasParallelogram } from "../src";
@@ -21,6 +21,7 @@ const initialVectors: CanvasVector[] = [
 const App = () => {
     const [vectors, setVectors] = useState<CanvasVector[]>(initialVectors);
     const [points, setPoints] = useState<DragTarget>(initialPoints);
+    const [locked, setLocked] = useState(false);
 
     const gradients: DragTarget = {
             x: 2 * points.x,
@@ -38,6 +39,14 @@ const App = () => {
             strokeColor: 'rgba(0,0,0,255.4)',
         }
     ];
+
+    useEffect(() => {
+        if (magnitude === 10) {
+            setLocked(true);
+        } else {
+            setLocked(false);
+        }
+    }, [magnitude]);
 
     const handleReset = () => {
         setVectors(initialVectors);
@@ -82,6 +91,7 @@ const App = () => {
                             height={height}
                             scale={scale}
                             vectors={vectors}
+                            locked={locked}
                             parallelograms={parallelograms}
                             snap={0.5}
                             customDraw={customDraw}

@@ -80,6 +80,7 @@ export function usePointerDrag<T extends DragTarget>(
         };
 
         const handleMove = (e: PointerEvent) => {
+            if (isLocked) return;
             if (dragIndexRef.current === null) return;
             const coords = getCanvasCoords(e);
             const [x, y] = applySnap(coords.x, coords.y);
