@@ -1,9 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {drawArrowhead, drawCircle, drawLine, GraphCanvas, Point, toCanvas, writeLabel} from "../src";
-import { CanvasVector } from "../src";
-import { CanvasParallelogram } from "../src";
+import {
+    CanvasParallelogram,
+    CanvasVector,
+    DragTarget,
+    drawArrowhead,
+    drawCircle,
+    drawLine,
+    GraphCanvas,
+    Point,
+    toCanvas,
+    writeLabel} from '@sirhc77/canvas-math-kit'
 import './index.css';
-import {DragTarget} from "../src";
 
 const initialPoints: DragTarget = { x: 2, y: 2, draggable: true };
 
