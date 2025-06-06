@@ -111,7 +111,7 @@ npm install
 npm run dev
 ```
 
-Or check the [live demo](#) (coming soon).
+Or check the [live demo](https://megafarad.com/canvas-math-kit/).
 
 ---
 
